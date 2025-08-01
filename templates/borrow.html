@@ -1,0 +1,72 @@
+{% extends "base.html" %}  <!-- 🧱 Kế thừa giao diện chung -->
+
+{% block title %}Mượn hàng{% endblock %}  <!-- 🏷 Tiêu đề hiển thị trên trình duyệt -->
+
+{% block content %}
+<h2>📦 Mượn hàng</h2>
+
+<!-- 🔍 Form tìm kiếm sản phẩm bằng Code -->
+<form method="GET" action="/borrow">
+    Nhập mã sản phẩm (Code):
+    <input type="text" name="code" required>
+    <button type="submit">Tìm</button>
+</form>
+
+<hr>
+
+<!-- 📋 Nếu tìm được sản phẩm thì hiển thị thông tin -->
+{% if thong_tin %}
+    <h4>📋 Thông tin sản phẩm:</h4>
+    <ul>
+        {% for col, val in thong_tin.items() %}
+            <li><strong>{{ col }}:</strong> {{ val }}</li>  <!-- 💡 Duyệt từng cột -->
+        {% endfor %}
+            {% if 'Ảnh mượn' in thong_tin and thong_tin['Ảnh mượn'] %}
+            <li>
+                <strong>Ảnh mượn:</strong>
+                <img src="{{ url_for('static', filename='images/borrow/' + thong_tin['Ảnh mượn']) }}" width="200">
+            </li>
+        {% else %}
+            <li><strong>Ảnh mượn:</strong> <span style="color:gray;">(Không có ảnh)</span></li>
+        {% endif %}
+
+        
+    </ul>
+
+    <!-- ❌ Nếu tình trạng là Unavailable thì báo popup -->
+    {% if thong_tin["Tình trạng"] == "Unavailable" %}
+        <script>alert("❌ Sản phẩm không khả dụng (đang được mượn).");</script>
+
+    <!-- ✅ Nếu tình trạng là Available thì hiển thị vị trí + form mượn -->
+    {% elif thong_tin["Tình trạng"] == "Available" %}
+
+        <!-- 📍 Chuyển đổi vị trí '3A1' → 'Kệ 3 - Hàng A - Ô 1' -->
+        {% set vi_tri = thong_tin["Vị trí"] %}
+        {% set hien_thi = "Kệ " ~ vi_tri[0] ~ " - Hàng " ~ vi_tri[1] ~ " - Ô " ~ vi_tri[2] %}
+        <script>alert("✅ Vị trí sản phẩm: {{ hien_thi }}");</script>
+
+
+        
+        <!-- 🧠 Hiển thị trạng thái -->
+        <p style="color: {{ mau_trang_thai }};">
+            📊 Trạng thái: {{ icon }} <strong>{{ trang_thai }}</strong> ({{ tile }}%)
+        </p>
+        
+
+        <!-- 🖼 Form xác nhận mượn sản phẩm -->
+        <form method="POST" action="/muon-xac-nhan" enctype="multipart/form-data">
+            <input type="hidden" name="code" value="{{ thong_tin['Code'] }}">  <!-- Gửi mã sản phẩm -->
+
+            Chụp ảnh sản phẩm đã mượn:
+            <input type="file" name="anh_muon" accept="image/*" required><br><br>
+
+            <button type="submit">✅ Mượn hàng</button>
+        </form>
+    {% endif %}
+
+<!-- ⚠️ Nếu không tìm thấy sản phẩm → báo lỗi -->
+{% elif thong_bao %}
+    <script>alert("{{ thong_bao }}");</script>
+{% endif %}
+
+{% endblock %}

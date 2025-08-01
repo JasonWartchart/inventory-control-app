@@ -1,0 +1,32 @@
+<!-- FILE: templates/borrow_success.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mượn hàng thành công</title>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial; text-align: center; padding: 50px; }
+        .success { background: #d4edda; color: #155724; padding: 30px; border-radius: 10px; margin: 20px; }
+        .info { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px; }
+        .btn { background: #007BFF; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; margin: 10px; }
+    </style>
+</head>
+<body>
+    <div class="success">
+        <h2>✅ MƯỢN HÀNG THÀNH CÔNG!</h2>
+    </div>
+    
+    <div class="info">
+        <h3>Chi tiết:</h3>
+        <p><strong>Mã khuôn:</strong> {{ ma_khuon }}</p>
+        <p><strong>Tên khuôn:</strong> {{ ten_khuon }}</p>
+        <p><strong>Người mượn:</strong> {{ nguoi_muon }}</p>
+        <p><strong>Số lượng:</strong> {{ so_luong }}</p>
+        <p><strong>Thời gian:</strong> {{ moment().format('DD/MM/YYYY HH:mm') }}</p>
+    </div>
+    
+    <a href="/scan_borrow" class="btn">🔄 Mượn tiếp</a>
+    <a href="/borrow_history" class="btn">📋 Xem lịch sử</a>
+    <a href="/dashboard" class="btn">🏠 Dashboard</a>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Trang web quản lý{% endblock %}</title>
+
+    <!-- 🎨 Font chữ & kiểu dáng chung cho toàn bộ giao diện -->
+    <style>
+        /* 📦 Hình nền dùng chung cho toàn bộ trang */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Segoe UI", Arial, sans-serif; /* ✅ Font chữ chung */
+            font-size: 16px;                             /* ✅ Cỡ chữ mặc định */
+            background-image: url("/static/background.jpg"); /* 🖼 Hình nền (bạn đổi ảnh sau) */
+            background-size: cover;                     /* Tràn khung */
+            background-attachment: fixed;               /* Cố định khi cuộn */
+            background-position: center;
+            color: #222;
+        }
+
+        /* 📄 Phần nội dung trang con được đặt giữa */
+        .content-container {
+            padding: 40px 60px;
+            background: rgba(255, 255, 255, 0.92);  /* Nền trắng mờ để dễ đọc */
+            margin: 60px auto;
+            max-width: 1000px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 🔐 Nút đăng xuất cố định góc phải trên */
+        .logout-icon {
+            position: fixed;
+            top: 16px;
+            right: 20px;
+            font-size: 20px;
+            text-decoration: none;
+            color: black;
+            z-index: 999;
+        }
+
+        .logout-icon:hover {
+            color: red;
+        }
+
+        /* 🧾 Input dùng trong web (form) có thể dùng style riêng nếu cần) */
+        input[type="text"], input[type="date"], input[type="number"] {
+            font-family: inherit;
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 🔐 Nút đăng xuất góc phải -->
+    <a href="/logout" class="logout-icon" title="Đăng xuất">🔒</a>
+
+    <!-- 📦 Phần nội dung riêng của từng trang sẽ xuất hiện tại đây -->
+    <div class="content-container">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+<!-- 🧱 Kế thừa giao diện chung từ base.html (font, hình nền, nút đăng xuất...) -->
+
+{% block title %}
+    Trang chính
+{% endblock %}
+<!-- 🏷 Đặt tiêu đề hiển thị trên tab trình duyệt -->
+
+{% block content %}
+<!-- 📦 Bắt đầu phần nội dung riêng của trang dashboard -->
+
+    <!-- 👤 Hiển thị thông tin người dùng đang đăng nhập -->
+    <div class="info">
+        👤 Nhân viên: <strong>{{ ma_nhan_vien }}</strong> - <em>{{ ten_nhan_vien }}</em>
+    </div>
+
+
+
+    
+    <!-- 📚 Các lựa chọn chức năng -->
+    <div class="menu">
+        <a href="/inventory">📦 Danh sách sản phẩm</a>
+    </div>
+    
+
+    <!-- 📦 Nút trả hàng -->
+    <div class="menu">
+        <a href="/return" class="menu-btn">🔄 Trả hàng</a>
+    </div>
+
+
+    <!-- 📦 Nút mượn hàng -->
+    <div class="menu">
+        <a href="/borrow">📦 Mượn hàng</a>
+    </div>
+
+
+
+
+{% endblock %}
+<!-- 📦 Kết thúc nội dung riêng -->

@@ -1,0 +1,13 @@
+<!-- return_success.html -->
+<h2>✅ Trả hàng thành công!</h2>
+<ul>
+    <li><strong>Code:</strong> {{ thong_tin['Code'] }}</li>
+    <li><strong>Tên:</strong> {{ thong_tin['Tên sản phẩm'] }}</li>
+    <li><strong>Vị trí mới:</strong> {{ thong_tin['Vị trí'] }}</li>
+    <li><strong>Ngày trả:</strong> {{ thong_tin['Ngày trả'] }}</li>
+    <li><strong>Người trả:</strong> {{ thong_tin['Người trả'] }}</li>
+    <li><strong>Ảnh xác thực:</strong><br>
+        <img src="{{ url_for('static', filename='images_return/' + thong_tin['Ảnh trả']) }}" width="200">
+    </li>
+</ul>
+<a href="/dashboard">🏠 Về trang chủ</a>

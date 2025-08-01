@@ -1,0 +1,49 @@
+<!-- FILE: templates/scan_borrow.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scan QR Mượn Hàng</title>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial; max-width: 500px; margin: 50px auto; padding: 20px; }
+        .form-group { margin: 15px 0; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+        .submit-btn { background: #007BFF; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; }
+        .camera-btn { background: #28a745; color: white; padding: 10px; border: none; border-radius: 5px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h2>📷 Scan QR Mượn Hàng</h2>
+    
+    <form method="POST">
+        <div class="form-group">
+            <label>QR Code Data:</label>
+            <input type="text" name="qr_data" placeholder="Quét QR hoặc nhập: BORROW:MA001:Tên khuôn" required>
+        </div>
+        
+        <div class="form-group">
+            <label>Người mượn:</label>
+            <input type="text" name="nguoi_muon" placeholder="Nhập tên người mượn" required>
+        </div>
+        
+        <div class="form-group">
+            <label>Số lượng mượn:</label>
+            <input type="number" name="so_luong_muon" value="1" min="1" required>
+        </div>
+        
+        <button type="submit" class="submit-btn">✅ Xác nhận mượn</button>
+    </form>
+    
+    <br>
+    <button class="camera-btn" onclick="openCamera()">📷 Mở Camera Scan</button>
+    
+    <br><br>
+    <a href="/dashboard">⬅️ Quay lại Dashboard</a>
+    
+    <script>
+        function openCamera() {
+            alert("Tính năng camera sẽ được cập nhật sau!");
+        }
+    </script>
+</body>
+</html>

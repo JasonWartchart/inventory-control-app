@@ -1,0 +1,300 @@
+ 
+ <!--    Thể hiện đang đọc file HTML   -->
+<!DOCTYPE html>
+
+    <!--    Thể hiện đang sử dụng ngôn ngữ tiếng Việt   -->
+<html lang="vi">
+<head>
+
+        <!--    Thể hiện đang sử dụng bảng ký tự (không bị lỗi font khi dùng tiếng Việt)   -->
+    <meta charset="UTF-8">
+    <title>Danh sách sản phẩm trong kho</title>
+
+    <!--
+        Đây là phần CSS để định dạng bảng hiển thị.
+        Gồm: căn giữa, viền bảng, font chữ, màu nền cột tiêu đề.
+    -->
+    <style>
+        /* THỂ HIỆN CÁI BẢNG HIỂN THỊ SẢN PHẨM */
+        .table-container {
+            width: 800px;                   /* 👈 Chiều ngang cố định */
+            height: 400px;                  /* 👈 Chiều cao cố định */
+            overflow: auto;                /* ✅ Cho phép cuộn nếu bảng lớn */
+            margin: 0 auto;                /* ✅ Căn giữa bảng */
+            border: 1px solid #ccc;
+            background-color: white; /* ✅ Thêm: nền trắng cho container bảng */
+            border-radius: 6px;       /* 👌 Tuỳ chọn: bo nhẹ 4 góc */
+        }
+
+        table {
+            border-collapse: collapse;       /* Gộp viền bảng lại thành 1 */
+            width: max-content;              /* 👈 Không bóp bảng, giữ nguyên kích thước */
+            table-layout: fixed;             /* ✅ Bắt buộc để sticky hoạt động ổn định */
+            background-color: white;        /* ✅ Thêm: nền trắng cho toàn bảng */
+        }
+
+        th, td {
+            border: 1px solid #ccc;          /* Viền xám nhạt cho ô */
+            padding: 8px;                    /* Cách lề trong ô 8px */
+            text-align: center;              /* Căn giữa nội dung trong ô */
+            min-width: 120px;              /* ✅ Đặt kích thước cột tối thiểu để dễ nhìn */
+        }
+        
+        th {
+            background-color: #f2f2f2;       /* Màu nền của hàng tiêu đề */
+        }
+
+        h1 {
+            text-align: center;              /* Tiêu đề lớn căn giữa */
+        }
+    
+
+
+
+
+
+
+                    /* THỂ HIỆN NÚT BẤM CHUYỂN TRANG */
+                    /* Container chính cho khối phân trang */
+        .pagination {
+            display: flex;                  /* Hiển thị các nút trên 1 hàng ngang */
+            justify-content: center;       /* Căn giữa các nút trong khối phân trang */
+            margin-top: 20px;              /* Cách lề phía trên 20px */
+            gap: 6px;                      /* Khoảng cách giữa các nút */
+            flex-wrap: wrap;               /* Cho phép tự xuống hàng nếu không đủ chỗ */
+        }
+
+                    /* Định dạng chung cho cả thẻ <a> (link có thể click) và <span> (text tĩnh) */
+        .pagination a,
+        .pagination span {
+            display: inline-block;         /* Hiển thị dạng khối nằm ngang */
+            padding: 8px 12px;             /* Khoảng cách giữa viền và nội dung trong nút */
+            border: 1px solid #ddd;        /* Viền màu xám nhạt */
+            border-radius: 50%;            /* Bo tròn 100% → tạo hình tròn */
+            text-decoration: none;         /* Bỏ gạch chân cho liên kết */
+            color: black;                  /* Màu chữ đen */
+            min-width: 32px;               /* Chiều ngang tối thiểu của nút */
+            text-align: center;            /* Căn giữa chữ trong nút */
+            font-weight: bold;             /* Chữ in đậm */
+        }
+
+                    /* Hiệu ứng khi rê chuột vào nút có thể bấm */
+        .pagination a:hover {
+        background-color: #f2f2f2;     /* Màu nền sáng lên khi hover */
+        }
+                    /* Hiệu ứng khi rê chuột vào nút không thể bấm */
+                    /* Nút đang ở trạng thái được chọn (trang hiện tại) */
+        .pagination .active {
+            background-color: orange;      /* Màu nền cam */
+            color: white;                  /* Chữ trắng */
+            border-color: orange;          /* Viền cùng màu với nền */
+        }
+
+                    /* Nút không thể bấm (ví dụ: mũi tên trái khi đang ở trang 1) */
+        .pagination .disabled {
+            color: #ccc;                   /* Chữ xám nhạt */
+            border-color: #eee;            /* Viền mờ hơn */
+            pointer-events: none;          /* Không cho bấm / không click được */
+        }
+    </style>
+</head>
+
+<body>
+
+        <h1>📦 Danh sách sản phẩm trong kho</h1>
+
+        <!-- 
+        Bọc bảng trong 1 khung có class 'table-container'
+        để CSS có thể cố định kích thước khung, thêm thanh cuộn -->
+        <div class="table-container">
+
+            <!--
+                Bắt đầu bảng HTML.
+                Dữ liệu sẽ được Flask truyền vào biến "columns" (tên các cột) và "data" (các dòng).
+            -->
+            <table>
+                <thead>
+                    <tr>
+                        <!--
+                            Duyệt qua danh sách tên cột (columns),
+                            để tạo các ô tiêu đề bảng (thẻ <th>)
+                        -->
+                        {% for col in columns %}
+                        <th>{{ col }}</th> <!-- Hiển thị tên cột, ví dụ: Số thứ tự, Hình dạng, v.v. -->
+                        {% endfor %}
+                   </tr>
+                </thead>
+
+                <tbody>
+                    <!--
+                        Duyệt qua từng dòng dữ liệu (data),
+                        mỗi dòng là 1 dictionary với key là tên cột.
+                    -->
+                    {% for row in data %}
+                    <tr>
+                        {% for col in columns %}
+                        <td>
+                            <!-- 👇 Nếu cột hiện tại là "Ngày nhập kho", thì hiển thị form nhập ngày và nút Lưu -->
+                            {% if col == "Ngày nhập kho" %}
+                            <form method="POST" action="/update-ngay">
+                            <!-- Ô nhập ngày, có giá trị mặc định từ Excel nếu có -->
+                            <input type="date" name="ngay" value="{{ row[col]|default('') }}" required>
+
+                            <!-- Input ẩn: chứa mã định danh sản phẩm (Code) -->
+                            <input type="hidden" name="Code" value="{{ row['Code'] }}">
+
+                            <!-- Input ẩn: xác định đang cập nhật cột nào -->
+                            <input type="hidden" name="cot" value="Ngày nhập kho">
+
+                            <!-- Nút gửi form -->
+                            <button type="submit">Lưu</button>
+                            </form>
+
+                            <!-- 👇 Nếu là cột "Ngày lấy hàng" -->
+                            {% elif col == "Ngày lấy hàng" %}
+                            <form method="POST" action="/update-ngay">
+                            <input type="date" name="ngay" value="{{ row[col]|default('') }}">
+                            <input type="hidden" name="Code" value="{{ row['Code'] }}">
+                            <input type="hidden" name="cot" value="Ngày lấy hàng">
+                            <button type="submit">Lưu</button>
+                            </form>
+
+                            <!-- 👇 Nếu là cột "Ngày trả hàng" -->
+                            {% elif col == "Ngày trả hàng" %}
+                            <form method="POST" action="/update-ngay">
+                            <input type="date" name="ngay" value="{{ row[col]|default('') }}">
+                            <input type="hidden" name="Code" value="{{ row['Code'] }}">
+                            <input type="hidden" name="cot" value="Ngày trả hàng">
+                            <button type="submit">Lưu</button>
+                            </form>
+
+                            <!-- 👇 Các cột khác chỉ hiển thị giá trị như bình thường -->
+                            {% else %}
+                            {{ row[col] }}
+                            {% endif %}
+                        </td>
+                            {% endfor %}
+                    </tr>
+
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+
+
+
+
+
+
+
+
+        <!-- PHÂN TRANG: giao diện nút tròn đẹp như trong hình -->
+        <div class="pagination">
+            <!-- Mũi tên về trang đầu và trang trước -->
+            {% if current_page > 1 %}
+                <a href="/inventory?page=1">&laquo;</a>
+                <a href="/inventory?page={{ current_page - 1 }}">&lsaquo;</a>
+            {% else %}
+                <span class="disabled">&laquo;</span>
+                <span class="disabled">&lsaquo;</span>
+            {% endif %}
+
+            <!-- Hiển thị các trang trong khoảng [current_page - 1, current_page + 1] -->
+            {% for p in range(1, total_pages + 1) %}
+                {% if p >= current_page - 1 and p <= current_page + 1 %}
+                    {% if  p == current_page %}
+                        <!-- Trang hiện tại -->
+                        <span class="active">{{ p }}</span>
+                    {% else %}
+                        <!-- Các trang liền kề có thể click -->
+                        <a href="/inventory?page={{ p }}">{{ p }}</a>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+
+            <!-- Mũi tên tới trang sau và trang cuối -->
+            {% if current_page < total_pages %}
+                <a href="/inventory?page={{ current_page + 1 }}">&rsaquo;</a>
+                <a href="/inventory?page={{ total_pages }}">&raquo;</a>
+            {% else %}
+                <span class="disabled">&rsaquo;</span>
+                <span class="disabled">&raquo;</span>
+            {% endif %}
+        </div>
+        </div>
+
+
+
+
+        <!-- 🔘 Nút để mở popup thêm sản phẩm -->
+        <div style="text-align: center; margin-top: 20px;">
+            <button onclick="openForm()">➕ Thêm sản phẩm</button>
+        </div>
+
+        <!-- 📦 POPUP form nhập sản phẩm mới -->
+        <div id="popupForm" style="
+                display: none;                     
+                position: fixed;                  
+                top: 20%; left: 50%;
+                transform: translate(-50%, -20%); 
+                background: white;               
+                padding: 20px;                
+                border: 1px solid #ccc;         
+                border-radius: 8px;               
+                z-index: 1000;">
+            <h3>📦 Thêm sản phẩm mới</h3>
+
+            <!-- Form gửi dữ liệu về Flask -->
+            <form method="POST" action="/them-san-pham">
+
+                <!-- Trường: Hình dạng sản phẩm -->
+                <label>Hình dạng:</label><br>
+                <input type="text" name="hinh_dang" required><br><br>
+
+                <!-- Trường: Code sản phẩm -->
+                <label>Code:</label><br>
+                <input type="text" name="code" required><br><br>
+
+                <!-- Trường: Tuổi thọ sản phẩm -->
+                <label>Tuổi thọ:</label><br>
+                <input type="number" name="tuoi_tho" required><br><br>
+
+                <!-- Nút lưu gửi form -->
+                <button type="submit">Lưu</button>
+
+                <!-- Nút đóng form -->
+                <button type="button" onclick="closeForm()">Đóng</button>
+
+            </form>
+        </div>
+
+        <!-- ☁️ Overlay nền mờ khi popup bật lên -->
+        <div id="overlay" onclick="closeForm()" style="
+            display: none;                     /* Ẩn ban đầu */
+            position: fixed;                  /* Cố định toàn trang */
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.3);   /* Nền đen mờ */
+            z-index: 999;">                   <!-- Nằm dưới popup nhưng trên mọi thứ khác -->
+        </div>
+
+        <!-- 🧠 JavaScript điều khiển mở / đóng popup -->
+        <script>
+            function openForm() {
+                // Hiển thị form nhập và overlay
+                document.getElementById('popupForm').style.display = 'block';
+                document.getElementById('overlay').style.display = 'block';
+                }
+
+            function closeForm() {
+                // Ẩn form nhập và overlay
+                document.getElementById('popupForm').style.display = 'none';
+                document.getElementById('overlay').style.display = 'none';
+            }
+        </script>
+
+
+
+
+</body>
+</html>

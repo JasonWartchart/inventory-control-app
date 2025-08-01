@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Nhập ngày nhập kho</title>
+</head>
+<body>
+    <h2>📦 Nhập ngày nhập kho theo Code</h2>
+
+    <!-- 🟢 Thông báo trạng thái: tìm thấy, không tìm thấy, cập nhật xong -->
+    {% if thong_bao %}
+        <p style="color:green;">{{ thong_bao }}</p>
+    {% endif %}
+
+    <!-- 🔍 FORM 1: Tìm Code -->
+    <form method="POST">
+        <label>Nhập Code:</label>
+        <input type="text" name="Code" required>
+        <button type="submit" name="action" value="tim">Tìm</button>
+    </form>
+
+    <!-- 📅 FORM 2: Nếu tìm thấy, hiện form nhập ngày nhập kho -->
+    {% if hien_form %}
+    <form method="POST">
+        <p>Đang sửa cho Code: <strong>{{ ma_tim_duoc }}</strong></p>
+        <label>Ngày nhập kho:</label>
+        <input type="date" name="ngay_nhap" required>
+
+        <!-- Truyền lại mã hàng ẩn để cập nhật đúng dòng -->
+        <input type="hidden" name="Code" value="{{ ma_tim_duoc }}">
+        <button type="submit" name="action" value="capnhat">Lưu</button>
+    </form>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,45 @@
+<h2>🔄 Trả hàng vào kho</h2>
+
+<!-- HIỂN THỊ THÔNG BÁO LỖI (nếu có) -->
+{% if thong_bao %}
+    <div style="color:red;">{{ thong_bao }}</div>
+{% endif %}
+
+<!-- FORM NHẬP CODE LUÔN HIỆN -->
+<form method="POST">
+    <label>Nhập mã sản phẩm cần trả:</label>
+    <input type="text" name="code" required>
+    <button type="submit">Kiểm tra</button>
+</form>
+
+{% if thong_tin %}
+    <!-- Hiện tiếp thông tin sản phẩm, form nhập vị trí, up ảnh xác thực -->
+    <h3>Thông tin sản phẩm trả:</h3>
+    <ul>
+        <li><strong>Code:</strong> {{ thong_tin['Code'] }}</li>
+        <li><strong>Tên:</strong> {{ thong_tin['Tên sản phẩm'] }}</li>
+        <li><strong>Vị trí cũ:</strong> {{ thong_tin['Vị trí'] }}</li>
+        <li>
+            <strong>Ảnh mượn:</strong><br>
+            {% if 'Ảnh mượn' in thong_tin and thong_tin['Ảnh mượn'] and thong_tin['Ảnh mượn']|string != "nan" %}
+                <img src="{{ url_for('static', filename='images/' + thong_tin['Ảnh mượn']|string) }}" width="200">
+            {% else %}
+                <span style="color:gray;">(Không có ảnh)</span>
+            {% endif %}
+        </li>
+    </ul>
+    <form method="POST" enctype="multipart/form-data" action="/return/confirm">
+        <input type="hidden" name="code" value="{{ thong_tin['Code'] }}">
+        <label>Nhập vị trí trả hàng:</label>
+        <input type="text" name="vi_tri" required list="poslist">
+        <datalist id="poslist">
+            {% for pos in available_positions %}
+                <option value="{{ pos }}">
+            {% endfor %}
+        </datalist>
+        <br>
+        <label>Ảnh xác thực trả hàng:</label>
+        <input type="file" name="anh_tra" accept="image/*" required><br><br>
+        <button type="submit">Xác nhận trả hàng</button>
+    </form>
+{% endif %}

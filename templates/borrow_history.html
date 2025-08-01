@@ -1,0 +1,65 @@
+<!-- FILE: templates/borrow_history.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lịch sử mượn hàng</title>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #f8f9fa; }
+        .status-borrowed { color: #dc3545; font-weight: bold; }
+        .status-returned { color: #28a745; }
+        .return-btn { background: #ffc107; color: black; padding: 5px 10px; border: none; border-radius: 3px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h2>📋 Lịch sử mượn hàng</h2>
+    
+    {% if records %}
+    <table>
+        <thead>
+            <tr>
+                <th>Thời gian</th>
+                <th>Mã khuôn</th>
+                <th>Tên khuôn</th>
+                <th>Người mượn</th>
+                <th>Số lượng</th>
+                <th>Trạng thái</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in records %}
+            <tr>
+                <td>{{ record['Thời gian'] }}</td>
+                <td>{{ record['Mã khuôn'] }}</td>
+                <td>{{ record['Tên khuôn'] }}</td>
+                <td>{{ record['Người mượn'] }}</td>
+                <td>{{ record['Số lượng mượn'] }}</td>
+                <td class="{% if record['Trạng thái'] == 'Đang mượn' %}status-borrowed{% else %}status-returned{% endif %}">
+                    {{ record['Trạng thái'] }}
+                </td>
+                <td>
+                    {% if record['Trạng thái'] == 'Đang mượn' %}
+                    <a href="/return_item/{{ loop.index0 }}">
+                        <button class="return-btn">🔄 Trả hàng</button>
+                    </a>
+                    {% else %}
+                    ✅ Đã trả
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>📭 Chưa có lịch sử mượn hàng nào!</p>
+    {% endif %}
+    
+    <br>
+    <a href="/scan_borrow">➕ Mượn hàng mới</a> | 
+    <a href="/dashboard">🏠 Dashboard</a>
+</body>
+</html>

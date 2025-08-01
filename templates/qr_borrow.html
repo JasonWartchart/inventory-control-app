@@ -1,0 +1,34 @@
+<!-- FILE: templates/qr_borrow.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>QR Code Mượn Hàng</title>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial; text-align: center; padding: 20px; }
+        .qr-container { margin: 20px auto; }
+        .info { background: #f0f8ff; padding: 15px; border-radius: 8px; margin: 20px; }
+        .print-btn { background: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h2>🏷️ QR Code Mượn Hàng</h2>
+    
+    <div class="info">
+        <h3>Thông tin khuôn đúc:</h3>
+        <p><strong>Mã khuôn:</strong> {{ ma_khuon }}</p>
+        <p><strong>Tên khuôn:</strong> {{ ten_khuon }}</p>
+        <p><strong>Số lượng hiện có:</strong> {{ so_luong }}</p>
+    </div>
+    
+    <div class="qr-container">
+        <h3>Quét QR để mượn:</h3>
+        <img src="data:image/png;base64,{{ qr_code }}" alt="QR Code" style="border: 2px solid #ddd; padding: 10px;">
+    </div>
+    
+    <button class="print-btn" onclick="window.print()">🖨️ In QR Code</button>
+    
+    <br><br>
+    <a href="/dashboard">⬅️ Quay lại Dashboard</a>
+</body>
+</html>
