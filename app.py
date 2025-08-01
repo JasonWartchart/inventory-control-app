@@ -6,6 +6,7 @@ from io import BytesIO
 import base64
 from datetime import datetime, timedelta
 
+
 # Khởi tạo Flask app
 app = Flask(__name__)
 
@@ -218,10 +219,7 @@ def muon_xac_nhan():
 # THÊM VÀO APP.PY - TÍNH NĂNG MƯỢN HÀNG BẰNG QR
 
 # Import thêm
-import qrcode
-from io import BytesIO
-import base64
-from datetime import datetime, timedelta
+
 
 # Route tạo QR code cho mượn hàng
 @app.route('/create_borrow_qr/<ma_khuon>')

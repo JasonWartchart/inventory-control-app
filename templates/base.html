@@ -3,30 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Trang web quản lý{% endblock %}</title>
-
     <!-- 🎨 Font chữ & kiểu dáng chung cho toàn bộ giao diện -->
     <style>
         /* 📦 Hình nền dùng chung cho toàn bộ trang */
         body {
             margin: 0;
             padding: 0;
-            font-family: "Segoe UI", Arial, sans-serif; /* ✅ Font chữ chung */
-            font-size: 16px;                             /* ✅ Cỡ chữ mặc định */
-            background-image: url("/static/background.jpg"); /* 🖼 Hình nền (bạn đổi ảnh sau) */
-            background-size: cover;                     /* Tràn khung */
-            background-attachment: fixed;               /* Cố định khi cuộn */
+            font-family: "Segoe UI", Arial, sans-serif;
+            font-size: 16px;
+            background-image: url("/static/background.jpg");
+            background-size: cover;
+            background-attachment: fixed;
             background-position: center;
             color: #222;
-        }
-
-        /* 📄 Phần nội dung trang con được đặt giữa */
-        .content-container {
-            padding: 40px 60px;
-            background: rgba(255, 255, 255, 0.92);  /* Nền trắng mờ để dễ đọc */
-            margin: 60px auto;
-            max-width: 1000px;
-            border-radius: 12px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            min-height: 100vh;
         }
 
         /* 🔐 Nút đăng xuất cố định góc phải trên */
@@ -39,28 +30,117 @@
             color: black;
             z-index: 999;
         }
-
         .logout-icon:hover {
             color: red;
         }
 
-        /* 🧾 Input dùng trong web (form) có thể dùng style riêng nếu cần) */
+        /* 📋 Menu Navigation bên trái */
+        .sidebar {
+            width: 250px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Nút quay lại ở đầu sidebar */
+        .back-button {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            cursor: pointer;
+            text-decoration: none;
+            color: #333;
+        }
+        .back-button:hover {
+            background: #e9ecef;
+        }
+
+        /* Menu items */
+        .menu-item {
+            display: block;
+            padding: 15px 20px;
+            margin: 5px 0;
+            background: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s;
+        }
+        .menu-item:hover {
+            background: #007bff;
+            color: white;
+        }
+
+        /* 📄 Phần nội dung chính */
+        .main-content {
+            flex: 1;
+            padding: 40px;
+        }
+
+        .content-container {
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.92);
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* 🧾 Input dùng trong web */
         input[type="text"], input[type="date"], input[type="number"] {
             font-family: inherit;
             font-size: 15px;
         }
+
+        /* Style cho trang login đặc biệt */
+        .login-page {
+            justify-content: center;
+            align-items: center;
+        }
+        .login-page .sidebar {
+            display: none;
+        }
+        .login-page .main-content {
+            flex: none;
+            padding: 0;
+        }
     </style>
 </head>
-<body>
-
-    <!-- 🔐 Nút đăng xuất góc phải -->
+<body {% if is_login_page %}class="login-page"{% endif %}>
+    <!-- 🔐 Nút đăng xuất góc phải (ẩn ở trang login) -->
+    {% if not is_login_page %}
     <a href="/logout" class="logout-icon" title="Đăng xuất">🔒</a>
+    {% endif %}
 
-    <!-- 📦 Phần nội dung riêng của từng trang sẽ xuất hiện tại đây -->
-    <div class="content-container">
-        {% block content %}
-        {% endblock %}
+    <!-- 📋 Sidebar Menu (ẩn ở trang login) -->
+    {% if not is_login_page %}
+    <div class="sidebar">
+        <!-- Nút quay lại -->
+        <a href="javascript:history.back()" class="back-button" title="Quay lại">
+            ⬅️ Quay lại
+        </a>
+        
+        <!-- Menu items -->
+        <a href="/dashboard" class="menu-item">🏠 Dashboard</a>
+        <a href="/inventory" class="menu-item">📦 Danh sách sản phẩm</a>
+        <a href="/borrow" class="menu-item">📥 Mượn hàng</a>
+        <a href="/return" class="menu-item">🔄 Trả hàng</a>
+        <a href="/borrow_history" class="menu-item">📋 Lịch sử mượn</a>
     </div>
+    {% endif %}
 
+    <!-- 📦 Phần nội dung chính -->
+    <div class="main-content">
+        <div class="content-container">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
 </body>
 </html>
